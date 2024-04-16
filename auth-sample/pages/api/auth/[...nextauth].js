@@ -6,14 +6,14 @@ export const authOptions = {
     CredentialsProvider({
       name: "Credentials",
       async authorize(credentials) {
-        const { username, password } = credentials;
+        const { email, password } = credentials;
         const res = await fetch("http://localhost:4444/auth/login", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            username,
+            email,
             password,
           }),
         });
