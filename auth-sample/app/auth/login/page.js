@@ -8,10 +8,15 @@ import { useRouter } from 'next/navigation'
 const LoginPage = ({ searchParams }) => {
  const [email, setEmail] = useState("");
  const [password, setPassword] = useState("");
+ const [isLoginBtnDisabled, setLoginBtnDisabled] = useState(true);
  const [errorMessage, setErrorMessage] = useState(""); 
 
  const router = useRouter();
 
+  const checkBtnDisability = (val) => {
+    if(val.length > 0)setLoginBtnDisabled(false);
+    else setLoginBtnDisabled(true);
+  }
 
  const onSubmit = async (e) => {
     e.preventDefault();
@@ -48,17 +53,27 @@ const LoginPage = ({ searchParams }) => {
           type="text"
           placeholder="Email"
           value={email} 
-          onChange={(e) => setEmail(e.target.value)} 
+          onChange={(e) => {setEmail(e.target.value); checkBtnDisability(e.target.value); }} 
           className="border border-gray-300 rounded-md p-2"
         />
         <input
           type="password"
           placeholder="Password"
           value={password}
-          onChange={(e) => setPassword(e.target.value)} 
+          onChange={(e) => {setPassword(e.target.value); checkBtnDisability(e.target.value); }} 
           className="border border-gray-300 rounded-md p-2"
         />
-        <button type="submit" className="bg-blue-500 text-white rounded-md p-2">
+
+      <style jsx>{`
+      button:disabled {
+          background-color: #cccccc;
+          cursor: not-allowed;
+      }
+      `}</style>
+
+        <button type="submit" 
+            disabled={isLoginBtnDisabled}
+            className="bg-blue-500 text-white rounded-md p-2">
           Login
         </button>
       </form>
