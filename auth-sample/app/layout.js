@@ -16,8 +16,9 @@ export default function RootLayout({ children }) {
     <html lang="en">
        <body className="{inter.className} bg-gray-200">
             <AuthProvider>
-                  <Navbar /> 
+                 
                   <ReduxProvider>
+                       <Navbar />  
                        {children}
                   </ReduxProvider> 
             </AuthProvider>
