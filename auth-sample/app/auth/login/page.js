@@ -26,7 +26,7 @@ const LoginPage = ({ searchParams }) => {
      dispatch(login({
       username: session?.user?.user?.name, // Assuming the session object has a user property with a name
       accessToken: session?.user?.user?.accessToken, // Assuming the session object has an accessToken property
-      roll: session?.user?.user.roll, // Assuming the session object has a roll property
+      roll: session?.user?.user?.roll, // Assuming the session object has a roll property
     }));
      router.push('/');
   }
