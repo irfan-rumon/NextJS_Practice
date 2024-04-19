@@ -1,8 +1,11 @@
 "use client";
 
-import { signIn } from "next-auth/react";
 import { useState } from "react";
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation';
+import { useDispatch } from 'react-redux';
+import { signIn, signOut, useSession } from "next-auth/react";
+import { useEffect } from "react";
+import { login } from "@/redux/features/auth-slice";
 
 
 const LoginPage = ({ searchParams }) => {
@@ -12,6 +15,22 @@ const LoginPage = ({ searchParams }) => {
  const [errorMessage, setErrorMessage] = useState(""); 
 
  const router = useRouter();
+ const { data: session } = useSession();
+ const dispatch = useDispatch();
+
+ useEffect(() => {
+  if (session) {
+     console.log("Session is now available:", session);
+     // Perform actions that depend on the session data, e.g., redirecting
+
+     dispatch(login({
+      username: session?.user?.user?.name, // Assuming the session object has a user property with a name
+      accessToken: session?.user?.user?.accessToken, // Assuming the session object has an accessToken property
+      roll: session?.user?.user.roll, // Assuming the session object has a roll property
+    }));
+     router.push('/');
+  }
+ }, [session, router]);
 
   const checkBtnDisability = (val) => {
     if(val.length > 0)setLoginBtnDisabled(false);
@@ -30,10 +49,7 @@ const LoginPage = ({ searchParams }) => {
     // Check if the sign-in attempt was unsuccessful
     if (!result.ok) {
       setErrorMessage("Wrong credentials. Please try again.");
-    } else {
-      // If successful, redirect 
-      router.push('/');
-    }
+    } 
  };
 
  return (
