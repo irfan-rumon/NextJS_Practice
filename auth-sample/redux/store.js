@@ -3,29 +3,33 @@ import authReducer from "./features/auth-slice";
 import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage'; 
 
-const persistConfig = {
-    key: 'auth-sample',
-    storage,
-}
+// const persistConfig = {
+//     key: 'auth-sample',
+//     storage,
+// }
 
 const rootReducer = combineReducers({
     authReducer
 });
-   
-const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
-    reducer: persistedReducer,
-    middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware({
-            serializableCheck: {
-                ignoredActions: [
-                    'persist/PERSIST',
-                    'persist/REHYDRATE',
-                    'persist/PAUSE',
-                    'persist/REGISTER',
-                    'persist/PURGE',
-                ],
-            },
-        }),
+    reducer: rootReducer,
 });
+   
+//const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+// export const store = configureStore({
+//     reducer: persistedReducer,
+//     middleware: (getDefaultMiddleware) =>
+//         getDefaultMiddleware({
+//             serializableCheck: {
+//                 ignoredActions: [
+//                     'persist/PERSIST',
+//                     'persist/REHYDRATE',
+//                     'persist/PAUSE',
+//                     'persist/REGISTER',
+//                     'persist/PURGE',
+//                 ],
+//             },
+//         }),
+// });

@@ -1,4 +1,5 @@
 import CredentialsProvider from "next-auth/providers/credentials";
+import { signIn, useSession, signOut } from "next-auth/react";
 import NextAuth from "next-auth";
 
 export const authOptions = { 
@@ -31,11 +32,15 @@ export const authOptions = {
 
  callbacks: {
     async jwt({ token, user }) {
-      return { ...token, ...user };
+      // Merge the user object directly into the token
+      if (user) {
+        return { ...token, ...user };
+      }
+      return token;
     },
     async session({ session, token }) {
-      session.user = token;
-      return session;
+      // Merge the token (which now includes the user object) into the session
+      return { ...session, ...token };
     },
  },
 
@@ -43,7 +48,6 @@ export const authOptions = {
     signIn: "/auth/login",
     signOut: '/auth/logout',
  },
- 
 };
 
 export default NextAuth(authOptions);
