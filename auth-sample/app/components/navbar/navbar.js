@@ -1,4 +1,5 @@
 "use client"
+
 import Link from "next/link";
 import React from "react";
 import { signIn, useSession, signOut } from "next-auth/react";
@@ -12,9 +13,9 @@ const Navbar = () => {
     const router = useRouter();
 
     const logoutClicked = () => {
-        console.log("Logout clicked");
-        dispatch(logout());
-       signOut();
+          console.log("Logout clicked");
+          dispatch(logout());
+          signOut();
     }
 
     console.log("Here session ", { session });  
@@ -25,14 +26,14 @@ const Navbar = () => {
                     Home
                 </Link>
 
-                {session?.user?.user?.roll === 'admin' && (
+                {session?.user?.roll === 'admin' && (
                        <Link className="text-sky-600 hover:text-sky-700 font-extrabold text-xl" href={"/admin"}>
                           Admin
                        </Link>
                  )
                 }
 
-                {session?.user?.user?.roll === 'user' && (
+                {session?.user?.roll === 'user' && (
                      <Link className="text-sky-600 hover:text-sky-700 font-extrabold text-xl" href={"/user"}>
                           User 
                       </Link>
@@ -42,7 +43,7 @@ const Navbar = () => {
                 <div className="ml-auto flex gap-2">
                     {session?.user ? (
                     <>
-                        <p className="text-sky-600"> {session.user.name}</p>
+                        
                         <button className="text-red-600 text-xl" onClick={logoutClicked}>
                              Logout
                         </button>

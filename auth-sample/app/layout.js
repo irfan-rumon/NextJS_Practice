@@ -1,7 +1,7 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/navbar/navbar";
-import { AuthProvider } from "./Providers";
+import { NextAuthProvider} from "./nextauth-provider";
 import { ReduxProvider } from "@/redux/redux-provider";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -15,13 +15,12 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
        <body className="{inter.className} bg-gray-200">
-            <AuthProvider>
-                 
+            <NextAuthProvider>
                   <ReduxProvider>
                        <Navbar />  
                        {children}
                   </ReduxProvider> 
-            </AuthProvider>
+            </NextAuthProvider>
        </body>
     </html>
   );

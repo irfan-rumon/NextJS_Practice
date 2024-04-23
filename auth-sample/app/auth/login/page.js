@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useEffect } from "react";
 import { login } from "@/redux/features/auth-slice";
+import { useSearchParams } from 'next/navigation'
 
 
 const LoginPage = ({ searchParams }) => {
@@ -14,43 +15,49 @@ const LoginPage = ({ searchParams }) => {
  const [isLoginBtnDisabled, setLoginBtnDisabled] = useState(true);
  const [errorMessage, setErrorMessage] = useState(""); 
 
- const router = useRouter();
+
+ const searchParamss = useSearchParams()
  const { data: session } = useSession();
+ const router = useRouter();
  const dispatch = useDispatch();
+ const queryMsg = searchParamss.get('message')?.toString();
+ //console.log(queryMsg)
 
- useEffect(() => {
-  if (session) {
-     console.log("Session is now available:", session);
-     // Perform actions that depend on the session data, e.g., redirecting
-
-     dispatch(login({
-      username: session?.user?.user?.name, // Assuming the session object has a user property with a name
-      accessToken: session?.user?.user?.accessToken, // Assuming the session object has an accessToken property
-      roll: session?.user?.user?.roll, // Assuming the session object has a roll property
-    }));
-     router.push('/');
-  }
- }, [session, router]);
 
   const checkBtnDisability = (val) => {
     if(val.length > 0)setLoginBtnDisabled(false);
     else setLoginBtnDisabled(true);
   }
 
- const onSubmit = async (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     const result = await signIn("credentials", {
-      email, 
-      password, 
-      redirect: false, 
-      callbackUrl: "/",
+       email, 
+       password, 
+       redirect: false, 
+       callbackUrl: "/",
     });
-
+   
     // Check if the sign-in attempt was unsuccessful
-    if (!result.ok) {
-      setErrorMessage("Wrong credentials. Please try again.");
-    } 
- };
+    if (!result) {
+       setErrorMessage("Wrong credentials. Please try again.");
+    }
+   };
+
+   useEffect(() => {
+    if (session && queryMsg != "You Are Not Authorized!" ) {
+        console.log("Session is now available:", session);
+        dispatch(login({
+         username: session?.user?.name, // Corrected property access
+         accessToken: session?.user?.accessToken, // Corrected property access
+         roll: session?.user?.roll, // Corrected property access
+       }));
+        if (router.pathname !== '/') {
+          router.push('/');
+        }
+    }
+  }, [session, router]);
+   
 
  return (
     <div className="flex flex-col justify-center items-center h-screen bg-gradient-to-br gap-1 from-cyan-300 to-sky-600">
